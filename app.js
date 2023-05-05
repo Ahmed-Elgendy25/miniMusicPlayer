@@ -247,6 +247,8 @@ function nextTrack() {
     currentArtistIndex = 0;
     currentTrackIndex = 0;
   }
+
+  listedOrNot();
   playTrack();
 }
 
@@ -324,21 +326,36 @@ const playlistDiv = document.querySelector('#playlist-div');
 
 addToList.addEventListener('click',function () {
 
+
+listedOrNot();
+ 
+ 
+
+  }
+); 
+
+function listedOrNot() {
+
   const currentArtist = artists[currentArtistIndex];
   const currentTrack = currentArtist.tracks[currentTrackIndex];
+
   const p = document.createElement('p');
   p.textContent = `${artistName.textContent} - ${albumName.textContent}`;
- 
-  if(addToListPlus.classList.contains('bi-plus-circle')&&listedOrNot()===false) {
-    currentTrack.playList='listed';
-    addToListPlus.classList.remove('bi-plus-circle');
-    addToListPlus.classList.add('bi-plus-circle-fill');
-    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
+  
+  if(currentTrack.playList===null) { //style the button then add to object that the track is listed on playlist
+
+
     
-    playlistDiv.append(p);
-    
+      currentTrack.playList='listed';
+      addToListPlus.classList.remove('bi-plus-circle');
+      addToListPlus.classList.add('bi-plus-circle-fill');
+      addToList.setAttribute('style','background-color: #202020; color:#ffff;');
+      
+      playlistDiv.append(p);
+      
+   
   }
-  else if(addToListPlus.classList.contains('bi-plus-circle-fill') &&currentTrack.playList==='listed') {
+  else {
     currentTrack.playList=null;
     addToListPlus.classList.remove('bi-plus-circle-fill');
     addToListPlus.classList.add('bi-plus-circle');
@@ -346,18 +363,11 @@ addToList.addEventListener('click',function () {
     
    playlistDiv.lastElementChild.remove();
   }
-}); 
-
-function listedOrNot() {
-  const currentArtist = artists[currentArtistIndex];
-  const currentTrack = currentArtist.tracks[currentTrackIndex];
-  if(currentTrack.playList===null) {
-    return false;
-  }
-  else {
-    return true;
-  }
 }
+
+
+
+
 
 
 // فى حاجة بص
