@@ -9,7 +9,8 @@ body {
   
 }
 body,html {
-    height:100%
+    height:100%;
+  
 }
 div p {
     color: #202020;
@@ -86,15 +87,19 @@ div p {
 
 
  .pref {
-    border-radius: 50%;
-    border-color: #999999;
+   
+    
+
     color: #999999;
     
 }
  .pref:hover {
     border-color: #56565669;
-    color: #67676791;
+    color: #000000a2;
 
+}
+.pref:active {
+    border: none;
 }
 
  .bi-heart-fill {
@@ -139,8 +144,32 @@ div p {
     transform: rotate(270deg);
 
   }
-  .volume-container {
-    position: relative;
 
-    bottom: 70px;
-  }
+
+.btn-outline-secondary {
+    background-color: #212529;
+    color: #f8f9fa;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+#exit {
+   
+    color: #212529;
+    border-color:#212529 ;
+}
+ 
+#exit:hover {
+    background-color: #212529; 
+    color: #e9ecef;
+    
+}
+
+#exit:active {
+    background-color: #212529; 
+    color: #e9ecef;
+    
+}

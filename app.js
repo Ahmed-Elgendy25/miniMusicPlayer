@@ -6,7 +6,7 @@ let p = document.createElement('p');
 const img = document.querySelector(".duotone-img");
 
 
-const  prefrences = document.querySelectorAll('.pref')
+const  prefrences = document.querySelector('.pref')
 
 
 
@@ -14,12 +14,7 @@ const  prefrences = document.querySelectorAll('.pref')
 
 
 /* eventlistener for like, and add in playlist */ 
-for(let pref of prefrences) {
-  pref.addEventListener('click',colorize);
-}
-
-
-function colorize() {
+prefrences.addEventListener('click', function () {
   let child = this.lastChild;
 
   if(child.classList.contains('bi-heart')) {
@@ -34,45 +29,44 @@ function colorize() {
     child.classList.add('bi-heart');
   }
 
-  if(child.classList.contains('bi-plus-circle')) {
-    child.classList.remove('bi-plus-circle');
-    child.classList.add('bi-plus-circle-fill');
-    this.setAttribute('style','background-color: #202020; color:#ffff;');
-   
-  }
-  else if(child.classList.contains('bi-plus-circle-fill')) {
-    child.classList.remove('bi-plus-circle-fill');
-    child.classList.add('bi-plus-circle');
-    this.removeAttribute("style");
-   
-  }
 
   
-}
+})
+
+
+
 
 
 
 
 
 p.textContent = "0:00"; 
+
 durationDiv.appendChild(p);
 progress.parentNode.appendChild(durationDiv);
-song.onloadedmetadata = function() {
+const refresh = song.onloadedmetadata = function() {
   progress.max = song.duration;
   progress.value = song.currentTime;
 
- 
+
 
 
   
 };
 
+
+
+
 const updateSongTime = () => {
-    progress.value = song.currentTime;
-    p.textContent = formatTime(song.currentTime) + " / " + formatTime(song.duration);
+
+  progress.value = song.currentTime;
+  p.textContent = formatTime(song.currentTime) + " / " + formatTime(song.duration);
   }
 
-ctrlIcon.addEventListener('click',function (e) {
+  /* when you click on play button -> it plays 
+    also when you click on pause button -> it pause
+  */
+  ctrlIcon.addEventListener('click',function (e) {
   e.preventDefault();
   if(ctrlIcon.classList.contains("bi-pause-circle-fill")) {
     song.pause();
@@ -81,7 +75,7 @@ ctrlIcon.addEventListener('click',function (e) {
     ctrlIcon.classList.add("bi-play-circle");
 
   } else {
-    song.play();
+    playTrack();
     
 
     ctrlIcon.classList.add("bi-pause-circle-fill");
@@ -91,20 +85,23 @@ ctrlIcon.addEventListener('click',function (e) {
   updateSongTime();
 });
 
+/* to make progress circle move in bar of slider*/
 setInterval(() => {
   progress.value = song.currentTime;
   updateSongTime();
 }, 500);
 
 progress.onchange = () => {
-  song.play();
+  playTrack();
   
 
   song.currentTime = progress.value;
-
+  updateSongTime();
   ctrlIcon.classList.add("bi-pause-circle-fill");
   ctrlIcon.classList.remove("bi-play-circle");
-  updateSongTime();
+
+
+
 
 };
 
@@ -171,17 +168,238 @@ volumeButton.addEventListener('click',function() {
 
 
 
-
-
-
-
 const artists = [
 
  {
-    name:'Marwan Pablo'
+    name:'Marwan Pablo',
+    tracks: [
+      {
+        name:'Free',
+        src:'free.mp3',
+        playList: null,
+      },
+      
+       {
+        name:'Ghaba',
+        src:'ghaba.mp3',
+        playList: null,
+       }
+    ]
   }
 ,
 
+{
+  name:'DizzyTooSkinny',
+  tracks: [
+    {
+      name:'STR3',
+      src:'STR3.mp3',
+      playList: null,
+    },
+    
+     {
+      name:'Restart',
+      src:'Restart.mp3',
+      playList: null,
+     }
+  ]
+}
 
-  
-]
+];
+
+
+const forwardBtn = document.querySelector('#forward');
+const backwardBtn = document.querySelector('#backward');
+
+let currentArtistIndex = 0;
+let currentTrackIndex = 0;
+
+// Play the current track
+const artistName=document.querySelector('#artist-name');
+const  albumName = document.querySelector('#album-name');
+
+function playTrack() {
+
+  const currentArtist = artists[currentArtistIndex];
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  song.src = currentTrack.src;
+  song.play();
+
+
+  albumName.textContent=currentTrack.name;
+  artistName.textContent=currentArtist.name;
+
+
+}
+
+// Go to the next track
+function nextTrack() {
+  const currentArtist = artists[currentArtistIndex];
+  if (currentTrackIndex < currentArtist.tracks.length - 1) {
+    // If there are more tracks in the current artist's tracks array, go to the next track
+    currentTrackIndex++;
+  } else if (currentArtistIndex < artists.length - 1) {
+    // If this is the last track of the current artist and there are more artists, go to the next artist's first track
+    currentArtistIndex++;
+    currentTrackIndex = 0;
+  } else {
+    // If this is the last track of the last artist, loop back to the first artist's first track
+    currentArtistIndex = 0;
+    currentTrackIndex = 0;
+  }
+  playTrack();
+}
+
+
+
+
+
+// Go to the previous track
+function prevTrack() {
+  const currentArtist = artists[currentArtistIndex];
+  if (currentTrackIndex > 0) {
+    // If there are previous tracks in the current artist's tracks array, go to the previous track
+    currentTrackIndex--;
+  } else if (currentArtistIndex > 0) {
+    // If this is the first track of the current artist and there are previous artists, go to the previous artist's last track
+    currentArtistIndex--;
+    currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;
+  } else {
+    // If this is the first track of the first artist, loop back to the last artist's last track
+    currentArtistIndex = artists.length - 1;
+    currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;
+  }
+  playTrack();
+}
+forwardBtn.addEventListener('click',nextTrack);
+backwardBtn.addEventListener('click', prevTrack);
+
+
+
+
+// Auto switch music when it finishes//
+song.addEventListener('ended', () => {
+  // Switch to the next track
+  nextTrack();
+});
+
+//Playlist//
+
+const playlistColumn = document.getElementById("playlist-column");
+const playlistIcon = document.getElementById("playlist-icon");
+const gridContainer3 = document.querySelector('.col-md-1');
+const gridContainer2 = document.querySelector('.col-md-8');
+
+playlistIcon.addEventListener('click', function() {
+  if (gridContainer3.classList.contains('col-md-1')) {
+    gridContainer3.classList.toggle('d-none');
+    playlistColumn.classList.toggle('d-none');
+    gridContainer2.classList.remove('col-md-8');
+    gridContainer2.classList.add('col-md-6');
+  } 
+});
+
+
+
+//Exit from playlist //
+const exit = document.querySelector('#exit');
+
+exit.addEventListener('click',function () {
+  gridContainer3.classList.toggle('d-none');
+  playlistColumn.classList.toggle('d-none');
+  gridContainer2.classList.remove('col-md-6');
+  gridContainer2.classList.add('col-md-8');
+});
+
+
+
+//Interaction with playlist//
+
+
+const addToList = document.querySelector('#pref-list');
+const addToListPlus = document.querySelector('#pref-list i');
+const playlistDiv = document.querySelector('#playlist-div');
+
+
+
+addToList.addEventListener('click',function () {
+
+  const currentArtist = artists[currentArtistIndex];
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  const p = document.createElement('p');
+  p.textContent = `${artistName.textContent} - ${albumName.textContent}`;
+ 
+  if(addToListPlus.classList.contains('bi-plus-circle')&&listedOrNot()===false) {
+    currentTrack.playList='listed';
+    addToListPlus.classList.remove('bi-plus-circle');
+    addToListPlus.classList.add('bi-plus-circle-fill');
+    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
+    
+    playlistDiv.append(p);
+    
+  }
+  else if(addToListPlus.classList.contains('bi-plus-circle-fill') &&currentTrack.playList==='listed') {
+    currentTrack.playList=null;
+    addToListPlus.classList.remove('bi-plus-circle-fill');
+    addToListPlus.classList.add('bi-plus-circle');
+    addToList.removeAttribute("style");
+    
+   playlistDiv.lastElementChild.remove();
+  }
+}); 
+
+function listedOrNot() {
+  const currentArtist = artists[currentArtistIndex];
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  if(currentTrack.playList===null) {
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+
+// فى حاجة بص
+// أبص فين ؟ 
+/*
+const artists = [
+
+ {
+    name:'Marwan Pablo',
+    tracks: [
+      {
+        name:'Free',
+        src:'free.mp3',
+        playList: null,
+      },
+      
+       {
+        name:'Ghaba',
+        src:'ghaba.mp3',
+        playList: null,
+       }
+    ]
+  }
+,
+
+{
+  name:'DizzyTooSkinny',
+  tracks: [
+    {
+      name:'STR3',
+      src:'STR3.mp3',
+      playList: null,
+    },
+    
+     {
+      name:'Restart',
+      src:'Restart.mp3',
+      playList: null,
+     }
+  ]
+}
+
+];
+
+*/
