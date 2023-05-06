@@ -248,7 +248,7 @@ function nextTrack() {
     currentTrackIndex = 0;
   }
 
-  listedOrNot();
+  
   playTrack();
 }
 
@@ -273,8 +273,44 @@ function prevTrack() {
   }
   playTrack();
 }
-forwardBtn.addEventListener('click',nextTrack);
-backwardBtn.addEventListener('click', prevTrack);
+
+
+forwardBtn.addEventListener('click',function() {
+//
+
+
+
+
+  nextTrack();
+
+  if(!listedOrNot()) {
+    addToListPlus.classList.remove('bi-plus-circle-fill');
+    addToListPlus.classList.add('bi-plus-circle');
+    addToList.removeAttribute("style");
+  }
+
+  else {
+    addToListPlus.classList.remove('bi-plus-circle');
+    addToListPlus.classList.add('bi-plus-circle-fill');
+    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
+  }
+
+});
+backwardBtn.addEventListener('click', function () {
+
+  prevTrack();
+
+  if(listedOrNot()) {
+    addToListPlus.classList.remove('bi-plus-circle');
+    addToListPlus.classList.add('bi-plus-circle-fill');
+    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
+  }
+  else {
+    addToListPlus.classList.remove('bi-plus-circle-fill');
+    addToListPlus.classList.add('bi-plus-circle');
+    addToList.removeAttribute("style");
+  }
+});
 
 
 
@@ -325,43 +361,55 @@ const playlistDiv = document.querySelector('#playlist-div');
 
 
 addToList.addEventListener('click',function () {
-
-
-listedOrNot();
- 
- 
-
-  }
-); 
-
-function listedOrNot() {
-
-  const currentArtist = artists[currentArtistIndex];
+ const currentArtist = artists[currentArtistIndex];
   const currentTrack = currentArtist.tracks[currentTrackIndex];
 
   const p = document.createElement('p');
-  p.textContent = `${artistName.textContent} - ${albumName.textContent}`;
+ 
+
   
-  if(currentTrack.playList===null) { //style the button then add to object that the track is listed on playlist
 
+  p.textContent = `${artistName.textContent} - ${albumName.textContent}`;
 
-    
-      currentTrack.playList='listed';
-      addToListPlus.classList.remove('bi-plus-circle');
-      addToListPlus.classList.add('bi-plus-circle-fill');
-      addToList.setAttribute('style','background-color: #202020; color:#ffff;');
-      
-      playlistDiv.append(p);
-      
+  if(addToListPlus.classList.contains('bi-plus-circle')) {
+   
+    currentTrack.playList='listed';
+    addToListPlus.classList.remove('bi-plus-circle');
+    addToListPlus.classList.add('bi-plus-circle-fill');
+ 
+    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
+  
+    playlistDiv.append(p);
+
+ 
    
   }
-  else {
+
+  else if(addToListPlus.classList.contains('bi-plus-circle-fill')) {
     currentTrack.playList=null;
     addToListPlus.classList.remove('bi-plus-circle-fill');
     addToListPlus.classList.add('bi-plus-circle');
     addToList.removeAttribute("style");
     
-   playlistDiv.lastElementChild.remove();
+
+
+
+   
+   
+
+   
+  }
+  
+}); 
+
+function listedOrNot() {
+  const currentArtist = artists[currentArtistIndex];
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  if(currentTrack.playList===null) {
+    return false;
+  }
+  else {
+    return true;
   }
 }
 
