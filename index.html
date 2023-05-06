@@ -129,11 +129,11 @@
          
     </div>
 
-    <div class="col-12 col-md-3  bg-danger  rounded-4  d-none h-100"  id="playlist-column" style="border: 2px solid red;"> <!-- class="d-none"-->
+    <div class="col-12 col-md-3  bg-light  rounded-4  d-none h-100"  id="playlist-column"> <!-- class="d-none"-->
 
    
 
-            <nav class="navbar my-2 bg-warning rounded-4 d-flex flex-row flex-wrap container-fluid align-items-center  justify-content-between  " style="height: auto; border: 2px solid blue; " >
+            <nav class="navbar my-2 bg-light rounded-4 d-flex flex-row flex-wrap container-fluid align-items-center  justify-content-between  " style="height: auto; " >
 
                
                       
@@ -154,12 +154,31 @@
             
             </nav>
 
-            <div class="d-flex bg-primary p-3 flex-column my-3 " style="overflow-y: scroll; height: 90%;" id="playlist-div">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Track</th>
+                        <th scope="col">Played</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+
+                    </tbody>
+                  </table>
+                  
+              </div>
+              
+            <!--
+            <div class="d-flex  p-3 flex-column my-3 " style="overflow-y: scroll; height: 90%;" id="playlist-div">
 
                     
 
 
             </div>
+
+            -->
 
             </div>
             

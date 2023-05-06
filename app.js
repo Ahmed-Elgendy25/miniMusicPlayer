@@ -177,12 +177,14 @@ const artists = [
         name:'Free',
         src:'free.mp3',
         playList: null,
+        countListened: 0,
       },
       
        {
         name:'Ghaba',
         src:'ghaba.mp3',
         playList: null,
+        countListened: 0,
        }
     ]
   }
@@ -195,12 +197,14 @@ const artists = [
       name:'STR3',
       src:'STR3.mp3',
       playList: null,
+      countListened: 0,
     },
     
      {
       name:'Restart',
       src:'Restart.mp3',
       playList: null,
+      countListened: 0,
      }
   ]
 }
@@ -210,10 +214,11 @@ const artists = [
 
 const forwardBtn = document.querySelector('#forward');
 const backwardBtn = document.querySelector('#backward');
-
+// currentArtistIndex & currentTrackIndex used to itrate over array of objects//
 let currentArtistIndex = 0;
 let currentTrackIndex = 0;
 
+let generalTrackIndex = 0; // track1# track2# track3#
 // Play the current track
 const artistName=document.querySelector('#artist-name');
 const  albumName = document.querySelector('#album-name');
@@ -238,9 +243,11 @@ function nextTrack() {
   if (currentTrackIndex < currentArtist.tracks.length - 1) {
     // If there are more tracks in the current artist's tracks array, go to the next track
     currentTrackIndex++;
+    generalTrackIndex++;
   } else if (currentArtistIndex < artists.length - 1) {
     // If this is the last track of the current artist and there are more artists, go to the next artist's first track
     currentArtistIndex++;
+    generalTrackIndex++;
     currentTrackIndex = 0;
   } else {
     // If this is the last track of the last artist, loop back to the first artist's first track
@@ -258,7 +265,6 @@ function nextTrack() {
 
 // Go to the previous track
 function prevTrack() {
-  const currentArtist = artists[currentArtistIndex];
   if (currentTrackIndex > 0) {
     // If there are previous tracks in the current artist's tracks array, go to the previous track
     currentTrackIndex--;
@@ -317,7 +323,16 @@ backwardBtn.addEventListener('click', function () {
 
 // Auto switch music when it finishes//
 song.addEventListener('ended', () => {
-  // Switch to the next track
+ 
+  const currentArtist = artists[currentArtistIndex];
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  //every-time the track finish it increases the counter of countListened in object//
+  const td = document.querySelector('.track .count');
+  ++currentTrack.countListened;
+  td.innerHTML= `<td>${currentTrack.countListened}</td>`
+
+
+    // Switch to the next track
   nextTrack();
 });
 
@@ -359,18 +374,29 @@ const addToListPlus = document.querySelector('#pref-list i');
 const playlistDiv = document.querySelector('#playlist-div');
 
 
+// toggle with playlist -> add or delete from playlist//
+
 
 addToList.addEventListener('click',function () {
  const currentArtist = artists[currentArtistIndex];
   const currentTrack = currentArtist.tracks[currentTrackIndex];
+const tableContainer= document.querySelector('tbody');
+  const tr = document.createElement('tr');
 
-  const p = document.createElement('p');
+  tr.classList.add("track");
  
-
+  tr.innerHTML = `
+  
+                        <th scope="row">${generalTrackIndex+1}</th>
+                        <td> <h6>${currentArtist.name} - ${currentTrack.name}</h6></td>
+                        <td class="count">${currentTrack.countListened}</td>
+  
+  `;
   
 
-  p.textContent = `${artistName.textContent} - ${albumName.textContent}`;
 
+  
+  //add in play-list//
   if(addToListPlus.classList.contains('bi-plus-circle')) {
    
     currentTrack.playList='listed';
@@ -379,19 +405,18 @@ addToList.addEventListener('click',function () {
  
     addToList.setAttribute('style','background-color: #202020; color:#ffff;');
   
-    playlistDiv.append(p);
 
+    tableContainer.append(tr);
  
    
   }
-
+//remove from play-list//
   else if(addToListPlus.classList.contains('bi-plus-circle-fill')) {
     currentTrack.playList=null;
     addToListPlus.classList.remove('bi-plus-circle-fill');
     addToListPlus.classList.add('bi-plus-circle');
     addToList.removeAttribute("style");
     
-
 
 
    
@@ -461,6 +486,8 @@ const artists = [
 ];
 
 */
+
+/*
 function sortByMostListened(playlist) {
   for (let i = 0; i < playlist.length - 1; i++) {
     let maxIndex = i;
@@ -491,3 +518,4 @@ console.log(sortedPlaylist);
   { title: "Song A", timesListened: 10 },
   { title: "Song B", timesListened: 5 },
 ]
+*/
