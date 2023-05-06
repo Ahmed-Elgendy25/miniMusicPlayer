@@ -461,3 +461,33 @@ const artists = [
 ];
 
 */
+function sortByMostListened(playlist) {
+  for (let i = 0; i < playlist.length - 1; i++) {
+    let maxIndex = i;
+    for (let j = i + 1; j < playlist.length; j++) {
+      if (playlist[j].timesListened > playlist[maxIndex].timesListened) {
+        maxIndex = j;
+      }
+    }
+    //swap
+    if (maxIndex !== i) {
+      [playlist[maxIndex], playlist[i]] = [playlist[i], playlist[maxIndex]];
+    }
+  }
+  return playlist;
+}
+const playlist = [
+  { title: "Song A", timesListened: 10 },
+  { title: "Song B", timesListened: 5 },
+  { title: "Song C", timesListened: 20 },
+  { title: "Song D", timesListened: 15 },
+];
+
+const sortedPlaylist = sortByMostListened(playlist);
+console.log(sortedPlaylist);
+[
+  { title: "Song C", timesListened: 20 },
+  { title: "Song D", timesListened: 15 },
+  { title: "Song A", timesListened: 10 },
+  { title: "Song B", timesListened: 5 },
+]
