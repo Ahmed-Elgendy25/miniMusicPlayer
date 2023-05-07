@@ -238,29 +238,26 @@ function playTrack() {
 }
 
 // Go to the next track
-function nextTrack() {
+function nextTrack() { //bug-here... general trackindex lma btrg3 l wra hya mrbota b next track 3shan last-trackindex
   const currentArtist = artists[currentArtistIndex];
+ 
   if (currentTrackIndex < currentArtist.tracks.length - 1) {
     // If there are more tracks in the current artist's tracks array, go to the next track
     currentTrackIndex++;
-    ++generalTrackIndex;
+    generalTrackIndex++;
   } else if (currentArtistIndex < artists.length - 1) {
     // If this is the last track of the current artist and there are more artists, go to the next artist's first track
     currentArtistIndex++;
-    ++ generalTrackIndex;
+    generalTrackIndex++;
     currentTrackIndex = 0;
   } else {
     // If this is the last track of the last artist, loop back to the first artist's first track
-
-    lastTrackIndex=generalTrackIndex;
-
+    lastTrackIndex = generalTrackIndex; // Set the lastTrackIndex to the current track index before looping back to the first track
     currentArtistIndex = 0;
-
     currentTrackIndex = 0;
-    generalTrackIndex=0;
+    generalTrackIndex = 0;
   }
 
-  
   playTrack();
 }
 
@@ -268,8 +265,9 @@ function nextTrack() {
 
 
 
+
 // Go to the previous track
-function prevTrack() {
+function prevTrack() { // bug here.
   if (currentTrackIndex > 0) {
     // If there are previous tracks in the current artist's tracks array, go to the previous track
     currentTrackIndex--;
@@ -331,18 +329,24 @@ backwardBtn.addEventListener('click', function () {
 
 
 // Auto switch music when it finishes//
-song.addEventListener('ended', () => {
+song.addEventListener('ended', () => { //bug here .. countListened
  
-  const currentArtist = artists[currentArtistIndex];
-  const currentTrack = currentArtist.tracks[currentTrackIndex];
-  //every-time the track finish it increases the counter of countListened in object//
-  const td = document.querySelector('.track .count');
-  ++currentTrack.countListened;
-  td.innerHTML= `<td>${currentTrack.countListened}</td>`
+  
+
+
+
 
 
     // Switch to the next track
-  nextTrack();
+    nextTrack();
+
+  //every-time the track finish, it increases the counter of countListened in object//
+  /*
+  const td = document.querySelector('.track .count');
+  const currentArtist = artists[currentArtistIndex];
+  currentArtist.tracks[currentTrackIndex].countListened++;
+  td.innerHTML= `<td>${ currentArtist.tracks[currentTrackIndex].countListened}</td>`;
+  */
 });
 
 //Playlist//
@@ -420,7 +424,7 @@ addToList.addEventListener('click',function () {
     const trackToRemove = document.querySelector(`.track:nth-child(${generalTrackIndex+1})`);
 
     if (trackToRemove !== null&&tableContainer.childElementCount!==1) {
-      const track = Audio.currentTrack
+     
       trackToRemove.remove();
     }
     else {
@@ -472,6 +476,41 @@ function listedOrNot() {
 // فى حاجة بص
 // أبص فين ؟ 
 /*
+
+
+*/
+
+
+
+
+function sortByMostListened(...playlist) {
+  let artistLength = playlist.length; //artist's array length
+
+  for(let i = 0; i < artistLength; i++) {
+    // Sorting the tracks for the current artist based on number of listens
+    let tracks = playlist[i].tracks;
+    let m = tracks.length;
+    for(let j = 0; j < m-1; j++) {
+      let maxIndex = j;
+      for(let k = j+1; k < m; k++) {
+        if(tracks[k].countListened > tracks[maxIndex].countListened) {
+          maxIndex = k;
+        }
+      }
+      if (maxIndex !== i) {
+        [playlist[maxIndex], playlist[i]] = [playlist[i], playlist[maxIndex]];
+      }
+    }
+    return playlist;
+  }
+}
+
+
+
+
+
+
+/*
 const artists = [
 
  {
@@ -481,12 +520,14 @@ const artists = [
         name:'Free',
         src:'free.mp3',
         playList: null,
+        countListened: 0,
       },
       
        {
         name:'Ghaba',
         src:'ghaba.mp3',
         playList: null,
+        countListened: 0,
        }
     ]
   }
@@ -499,49 +540,29 @@ const artists = [
       name:'STR3',
       src:'STR3.mp3',
       playList: null,
+      countListened: 10,
     },
     
      {
       name:'Restart',
       src:'Restart.mp3',
       playList: null,
+      countListened: 0,
      }
   ]
 }
 
 ];
-
 */
 
-/*
-function sortByMostListened(playlist) {
-  for (let i = 0; i < playlist.length - 1; i++) {
-    let maxIndex = i;
-    for (let j = i + 1; j < playlist.length; j++) {
-      if (playlist[j].timesListened > playlist[maxIndex].timesListened) {
-        maxIndex = j;
-      }
-    }
-    //swap
-    if (maxIndex !== i) {
-      [playlist[maxIndex], playlist[i]] = [playlist[i], playlist[maxIndex]];
-    }
-  }
-  return playlist;
-}
-const playlist = [
-  { title: "Song A", timesListened: 10 },
-  { title: "Song B", timesListened: 5 },
-  { title: "Song C", timesListened: 20 },
-  { title: "Song D", timesListened: 15 },
-];
 
-const sortedPlaylist = sortByMostListened(playlist);
-console.log(sortedPlaylist);
+/*
 [
   { title: "Song C", timesListened: 20 },
   { title: "Song D", timesListened: 15 },
   { title: "Song A", timesListened: 10 },
   { title: "Song B", timesListened: 5 },
 ]
+
+
 */
