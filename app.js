@@ -217,7 +217,7 @@ const backwardBtn = document.querySelector('#backward');
 // currentArtistIndex & currentTrackIndex used to itrate over array of objects//
 let currentArtistIndex = 0;
 let currentTrackIndex = 0;
-
+let lastTrackIndex;
 let generalTrackIndex = 0; // track1# track2# track3#
 // Play the current track
 const artistName=document.querySelector('#artist-name');
@@ -243,16 +243,21 @@ function nextTrack() {
   if (currentTrackIndex < currentArtist.tracks.length - 1) {
     // If there are more tracks in the current artist's tracks array, go to the next track
     currentTrackIndex++;
-    generalTrackIndex++;
+    ++generalTrackIndex;
   } else if (currentArtistIndex < artists.length - 1) {
     // If this is the last track of the current artist and there are more artists, go to the next artist's first track
     currentArtistIndex++;
-    generalTrackIndex++;
+    ++ generalTrackIndex;
     currentTrackIndex = 0;
   } else {
     // If this is the last track of the last artist, loop back to the first artist's first track
+
+    lastTrackIndex=generalTrackIndex;
+
     currentArtistIndex = 0;
+
     currentTrackIndex = 0;
+    generalTrackIndex=0;
   }
 
   
@@ -268,15 +273,19 @@ function prevTrack() {
   if (currentTrackIndex > 0) {
     // If there are previous tracks in the current artist's tracks array, go to the previous track
     currentTrackIndex--;
+
   } else if (currentArtistIndex > 0) {
     // If this is the first track of the current artist and there are previous artists, go to the previous artist's last track
     currentArtistIndex--;
     currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;
+    
   } else {
     // If this is the first track of the first artist, loop back to the last artist's last track
-    currentArtistIndex = artists.length - 1;
-    currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;
+    currentArtistIndex = artists.length - 1;//go to last artist
+    currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;// go to last track of last artist
+    generalTrackIndex=lastTrackIndex;
   }
+  --generalTrackIndex;
   playTrack();
 }
 
@@ -286,8 +295,8 @@ forwardBtn.addEventListener('click',function() {
 
 
 
-
   nextTrack();
+
 
   if(!listedOrNot()) {
     addToListPlus.classList.remove('bi-plus-circle-fill');
@@ -376,56 +385,73 @@ const playlistDiv = document.querySelector('#playlist-div');
 
 // toggle with playlist -> add or delete from playlist//
 
-
 addToList.addEventListener('click',function () {
- const currentArtist = artists[currentArtistIndex];
+  const currentArtist = artists[currentArtistIndex];
   const currentTrack = currentArtist.tracks[currentTrackIndex];
-const tableContainer= document.querySelector('tbody');
+  const tableContainer = document.querySelector('tbody');
   const tr = document.createElement('tr');
-
   tr.classList.add("track");
- 
+
   tr.innerHTML = `
-  
-                        <th scope="row">${generalTrackIndex+1}</th>
-                        <td> <h6>${currentArtist.name} - ${currentTrack.name}</h6></td>
-                        <td class="count">${currentTrack.countListened}</td>
-  
+    <th scope="row">${generalTrackIndex+1}</th>
+    <td><h6>${currentArtist.name} - ${currentTrack.name}</h6></td>
+    <td class="count">${currentTrack.countListened}</td>
   `;
-  
 
-
-  
-  //add in play-list//
-  if(addToListPlus.classList.contains('bi-plus-circle')) {
-   
-    currentTrack.playList='listed';
+  // add to play-list
+  if (addToListPlus.classList.contains('bi-plus-circle')) {
+    currentTrack.playList = 'listed';
     addToListPlus.classList.remove('bi-plus-circle');
     addToListPlus.classList.add('bi-plus-circle-fill');
- 
     addToList.setAttribute('style','background-color: #202020; color:#ffff;');
-  
-
     tableContainer.append(tr);
- 
-   
+
   }
-//remove from play-list//
-  else if(addToListPlus.classList.contains('bi-plus-circle-fill')) {
-    currentTrack.playList=null;
+  // remove from play-list
+  else if (addToListPlus.classList.contains('bi-plus-circle-fill')) {
     addToListPlus.classList.remove('bi-plus-circle-fill');
     addToListPlus.classList.add('bi-plus-circle');
     addToList.removeAttribute("style");
-    
 
 
-   
-   
 
-   
+
+
+    const trackToRemove = document.querySelector(`.track:nth-child(${generalTrackIndex+1})`);
+
+    if (trackToRemove !== null&&tableContainer.childElementCount!==1) {
+      const track = Audio.currentTrack
+      trackToRemove.remove();
+    }
+    else {
+      //remove only last child (1-child) in container 
+      document.querySelector('.track').remove();
+    }
+    /*
+    FAILED :(
+    const trackToRemove = document.querySelector(`.track:nth-child(${index})`);
+
+
+    if (trackToRemove !== null) {
+      trackToRemove.remove();
+      index--;
+    }
+    */
+    /*
+    FAILED :(
+    const trackToRemove = document.querySelector(`.track:nth-child(${generalTrackIndex+1})`);
+
+    if (trackToRemove !== null&&tableContainer.childElementCount!==1) {
+      trackToRemove.remove();
+    }
+    else {
+      //remove only last child (1-child) in container 
+      document.querySelector('.track').remove();
+    }
+    */
   }
-  
-}); 
+});
+
 
 function listedOrNot() {
   const currentArtist = artists[currentArtistIndex];
