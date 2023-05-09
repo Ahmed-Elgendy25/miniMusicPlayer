@@ -347,6 +347,7 @@ const ended = song.addEventListener('ended', () => {
   // increment the countListened of the current track
   currentTrack.countListened++;
 
+  sortByMostListenedTracks(artists);
 
   /*
   
@@ -369,7 +370,11 @@ Essentially, this code updates the count of times a track has been played in the
   });
 
   // Switch to the next track
+
+ 
   playNextTrack();
+  
+ 
 });
 
 
@@ -490,31 +495,28 @@ function updateCountListened() {
 
 
 
-/*
-**************Sorting Algorithm ****************
-function sortByMostListened(...playlist) {
-  let artistLength = playlist.length; //artist's array length
+function sortByMostListenedTracks(artists) {
+  let artistLength = artists.length;
 
   for(let i = 0; i < artistLength; i++) {
-    // Sorting the tracks for the current artist based on number of listens
-    let tracks = playlist[i].tracks;
+    let tracks = artists[i].tracks;
     let m = tracks.length;
-    for(let j = 0; j < m-1; j++) {
+    for(let j = 0; j < m; j++) {
       let maxIndex = j;
       for(let k = j+1; k < m; k++) {
         if(tracks[k].countListened > tracks[maxIndex].countListened) {
           maxIndex = k;
         }
       }
-      if (maxIndex !== i) {
-        [playlist[maxIndex], playlist[i]] = [playlist[i], playlist[maxIndex]];
+      if (maxIndex !== j) {
+        [tracks[maxIndex], tracks[j]] = [tracks[j], tracks[maxIndex]];
       }
     }
-    return playlist;
   }
 }
 
-*/
+
+
 
 
 
