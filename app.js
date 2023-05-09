@@ -160,8 +160,7 @@ volumeButton.addEventListener('click',function() {
 
 
 
-
-
+//i need function to iterate over every artist's track when i press forward button//
 
 
 
@@ -217,16 +216,19 @@ const backwardBtn = document.querySelector('#backward');
 // currentArtistIndex & currentTrackIndex used to itrate over array of objects//
 let currentArtistIndex = 0;
 let currentTrackIndex = 0;
-let lastTrackIndex;
-let generalTrackIndex = 0; // track1# track2# track3#
+
+let generalTrackIndex = 0;
+let lastTrackIndex ;
+//let lastTrackIndex;
+//let generalTrackIndex = 0; // track1# track2# track3#
 // Play the current track
 const artistName=document.querySelector('#artist-name');
 const  albumName = document.querySelector('#album-name');
 
 function playTrack() {
 
-  const currentArtist = artists[currentArtistIndex];
-  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  let currentArtist = artists[currentArtistIndex];
+  let currentTrack = currentArtist.tracks[currentTrackIndex];
   song.src = currentTrack.src;
   song.play();
 
@@ -238,23 +240,31 @@ function playTrack() {
 }
 
 // Go to the next track
-function nextTrack() { //bug-here... general trackindex lma btrg3 l wra hya mrbota b next track 3shan last-trackindex
-  const currentArtist = artists[currentArtistIndex];
- 
+
+
+function playNextTrack() {
+  let currentArtist = artists[currentArtistIndex];
+
+  
+  // Play the current track...
+  
+
+  
+  // Move to the next track or artist
   if (currentTrackIndex < currentArtist.tracks.length - 1) {
-    // If there are more tracks in the current artist's tracks array, go to the next track
     currentTrackIndex++;
     generalTrackIndex++;
   } else if (currentArtistIndex < artists.length - 1) {
-    // If this is the last track of the current artist and there are more artists, go to the next artist's first track
+        // If this is the last track of the current artist and there are more artists
+        //, go to the next artist's first track//
     currentArtistIndex++;
-    generalTrackIndex++;
     currentTrackIndex = 0;
+    generalTrackIndex++;
   } else {
-    // If this is the last track of the last artist, loop back to the first artist's first track
-    lastTrackIndex = generalTrackIndex; // Set the lastTrackIndex to the current track index before looping back to the first track
+    // We've reached the end of the last artist's last track, so start over from the beginning
     currentArtistIndex = 0;
     currentTrackIndex = 0;
+    lastTrackIndex=generalTrackIndex;
     generalTrackIndex = 0;
   }
 
@@ -271,11 +281,12 @@ function prevTrack() { // bug here.
   if (currentTrackIndex > 0) {
     // If there are previous tracks in the current artist's tracks array, go to the previous track
     currentTrackIndex--;
-
+    generalTrackIndex--;
   } else if (currentArtistIndex > 0) {
     // If this is the first track of the current artist and there are previous artists, go to the previous artist's last track
     currentArtistIndex--;
     currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;
+    generalTrackIndex--;
     
   } else {
     // If this is the first track of the first artist, loop back to the last artist's last track
@@ -283,7 +294,7 @@ function prevTrack() { // bug here.
     currentTrackIndex = artists[currentArtistIndex].tracks.length - 1;// go to last track of last artist
     generalTrackIndex=lastTrackIndex;
   }
-  --generalTrackIndex;
+
   playTrack();
 }
 
@@ -293,7 +304,7 @@ forwardBtn.addEventListener('click',function() {
 
 
 
-  nextTrack();
+  playNextTrack();
 
 
   if(!listedOrNot()) {
@@ -329,25 +340,38 @@ backwardBtn.addEventListener('click', function () {
 
 
 // Auto switch music when it finishes//
-song.addEventListener('ended', () => { //bug here .. countListened
- 
-  
-
-
-
-
-
-    // Switch to the next track
-    nextTrack();
-
-  //every-time the track finish, it increases the counter of countListened in object//
-  /*
-  const td = document.querySelector('.track .count');
+const ended = song.addEventListener('ended', () => {
   const currentArtist = artists[currentArtistIndex];
-  currentArtist.tracks[currentTrackIndex].countListened++;
-  td.innerHTML= `<td>${ currentArtist.tracks[currentTrackIndex].countListened}</td>`;
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+
+  // increment the countListened of the current track
+  currentTrack.countListened++;
+
+
+  /*
+  
+This code selects all the elements with the CSS class .track which represent the rows in the playlist table. It then loops through each row using the forEach method
+, and for each row, it extracts the artist name and track name from the h6 element in that row using the textContent property and the split method. 
+It then checks if the extracted artist name and track name match the current artist and track using an if statement.
+If the names match, it selects the element with the class .count which represents the count of times the track has been played and 
+updates its text content to the new count value using the textContent property.
+Essentially, this code updates the count of times a track has been played in the playlist table every time the track finishes playing.
+  
   */
+  const tracksInPlaylist = document.querySelectorAll('.track');
+  tracksInPlaylist.forEach(track => {
+      const artistName = track.querySelector('h6').textContent.split(' - ')[0];
+      const trackName = track.querySelector('h6').textContent.split(' - ')[1];
+      if (artistName === currentArtist.name && trackName === currentTrack.name) {
+          const countElem = track.querySelector('.count');
+          countElem.textContent = currentTrack.countListened;
+      }
+  });
+
+  // Switch to the next track
+  playNextTrack();
 });
+
 
 //Playlist//
 
@@ -388,16 +412,15 @@ const playlistDiv = document.querySelector('#playlist-div');
 
 
 // toggle with playlist -> add or delete from playlist//
-
-addToList.addEventListener('click',function () {
-  const currentArtist = artists[currentArtistIndex];
-  const currentTrack = currentArtist.tracks[currentTrackIndex];
+addToList.addEventListener('click', function() {
+  let currentArtist = artists[currentArtistIndex];
+  let currentTrack = currentArtist.tracks[currentTrackIndex];
   const tableContainer = document.querySelector('tbody');
   const tr = document.createElement('tr');
   tr.classList.add("track");
-
+//
   tr.innerHTML = `
-    <th scope="row">${generalTrackIndex+1}</th>
+  <th scope="row">${generalTrackIndex+1}</th>
     <td><h6>${currentArtist.name} - ${currentTrack.name}</h6></td>
     <td class="count">${currentTrack.countListened}</td>
   `;
@@ -409,52 +432,26 @@ addToList.addEventListener('click',function () {
     addToListPlus.classList.add('bi-plus-circle-fill');
     addToList.setAttribute('style','background-color: #202020; color:#ffff;');
     tableContainer.append(tr);
-
   }
   // remove from play-list
-  else if (addToListPlus.classList.contains('bi-plus-circle-fill')) {
+  else {
+    currentTrack.playList = null;
     addToListPlus.classList.remove('bi-plus-circle-fill');
     addToListPlus.classList.add('bi-plus-circle');
     addToList.removeAttribute("style");
 
-
-
-
-
-    const trackToRemove = document.querySelector(`.track:nth-child(${generalTrackIndex+1})`);
-
-    if (trackToRemove !== null&&tableContainer.childElementCount!==1) {
-     
-      trackToRemove.remove();
-    }
-    else {
-      //remove only last child (1-child) in container 
-      document.querySelector('.track').remove();
-    }
-    /*
-    FAILED :(
-    const trackToRemove = document.querySelector(`.track:nth-child(${index})`);
-
-
-    if (trackToRemove !== null) {
-      trackToRemove.remove();
-      index--;
-    }
-    */
-    /*
-    FAILED :(
-    const trackToRemove = document.querySelector(`.track:nth-child(${generalTrackIndex+1})`);
-
-    if (trackToRemove !== null&&tableContainer.childElementCount!==1) {
-      trackToRemove.remove();
-    }
-    else {
-      //remove only last child (1-child) in container 
-      document.querySelector('.track').remove();
-    }
-    */
+    // remove the track from the playlist table
+    const tracksInPlaylist = document.querySelectorAll('.track');
+    tracksInPlaylist.forEach(track => {
+      const artistName = track.querySelector('h6').textContent.split(' - ')[0];
+      const trackName = track.querySelector('h6').textContent.split(' - ')[1];
+      if (artistName === currentArtist.name && trackName === currentTrack.name) {
+        track.remove();
+      }
+    });
   }
 });
+
 
 
 function listedOrNot() {
@@ -469,7 +466,18 @@ function listedOrNot() {
 }
 
 
+/*
+function updateCountListened() {
+  const currentArtist = artists[currentArtistIndex];
+  const currentTrack = currentArtist.tracks[currentTrackIndex];
+  
+  if (currentTrack!==null) {
+    currentTrack.countListened++;
 
+  }
+  return currentTrack.countListened;
+}
+*/
 
 
 
@@ -482,7 +490,8 @@ function listedOrNot() {
 
 
 
-
+/*
+**************Sorting Algorithm ****************
 function sortByMostListened(...playlist) {
   let artistLength = playlist.length; //artist's array length
 
@@ -505,7 +514,7 @@ function sortByMostListened(...playlist) {
   }
 }
 
-
+*/
 
 
 
