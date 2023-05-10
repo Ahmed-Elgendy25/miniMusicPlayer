@@ -28,8 +28,8 @@ div p {
 
 #artist-name {
     font-family: 'Bebas Neue', cursive;
-    letter-spacing: 20px;
-    font-size: 80px;
+    letter-spacing: 15px;
+    font-size: 4rem;
     position: relative;
     z-index: 1;
     display: block;

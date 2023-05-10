@@ -171,6 +171,7 @@ const artists = [
 
  {
     name:'Marwan Pablo',
+    icon:'marwanPablo3.jpg',
     tracks: [
       {
         name:'Free',
@@ -192,12 +193,13 @@ const artists = [
 ,
 
 {
-  name:'DizzyTooSkinny',
+  name:'Dizzy Too Skinny',
+  icon:'dizzy.jpg',
   tracks: [
     {
       name:'STR3',
       src:'STR3.mp3',
-      img:'dizzy3.jpg',
+      img:'dizzy4.jpg',
       playList: null,
       countListened: 0,
     },
@@ -214,6 +216,7 @@ const artists = [
 
 {
   name:'Marwan Moussa',
+  icon:'marwanMoussa.jpg',
   tracks: [
     {
       name:'VIP',
@@ -249,8 +252,6 @@ const artists = [
      },
   ]
 }
-,
-
 
 
 ];
@@ -344,52 +345,67 @@ function prevTrack() { // bug here.
 }
 
 
-forwardBtn.addEventListener('click',function() {
-//
+forwardBtn.addEventListener('click', function () {
+    
 
+    playNextTrack();
 
+    let currentArtist = artists[currentArtistIndex];
+    let currentTrack = currentArtist.tracks[currentTrackIndex];
 
-  playNextTrack();
+    //CHANGE IMAGE & ICON UPON EACH TRACK//
+    let img = document.querySelector('#artist-img');
+    let icon = document.querySelector('#artist-img2');
+    img.src = currentTrack.img;
+    icon.src = currentArtist.icon;
 
-  let currentArtist = artists[currentArtistIndex];
-  let currentTrack = currentArtist.tracks[currentTrackIndex];
-  
-   //CHANGE IMAGE UPON EACH TRACK//
-   let img = document.querySelector('#artist-img');
-  img.src = currentTrack.img;
-  
-  if(!listedOrNot()) {
-    addToListPlus.classList.remove('bi-plus-circle-fill');
-    addToListPlus.classList.add('bi-plus-circle');
-    addToList.removeAttribute("style");
-  }
-
-  else {
-    addToListPlus.classList.remove('bi-plus-circle');
-    addToListPlus.classList.add('bi-plus-circle-fill');
-    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
-  }
+    if (!listedOrNot()) {
+        addToListPlus
+            .classList
+            .remove('bi-plus-circle-fill');
+        addToListPlus
+            .classList
+            .add('bi-plus-circle');
+        addToList.removeAttribute("style");
+    } else {
+        addToListPlus
+            .classList
+            .remove('bi-plus-circle');
+        addToListPlus
+            .classList
+            .add('bi-plus-circle-fill');
+        addToList.setAttribute('style', 'background-color: #202020; color:#ffff;');
+    }
 
 });
 backwardBtn.addEventListener('click', function () {
 
-  prevTrack();
-  let currentArtist = artists[currentArtistIndex];
-  let currentTrack = currentArtist.tracks[currentTrackIndex];
-  
-   //CHANGE IMAGE UPON EACH TRACK//
-   let img = document.querySelector('#artist-img');
-  img.src = currentTrack.img;
-  if(listedOrNot()) {
-    addToListPlus.classList.remove('bi-plus-circle');
-    addToListPlus.classList.add('bi-plus-circle-fill');
-    addToList.setAttribute('style','background-color: #202020; color:#ffff;');
-  }
-  else {
-    addToListPlus.classList.remove('bi-plus-circle-fill');
-    addToListPlus.classList.add('bi-plus-circle');
-    addToList.removeAttribute("style");
-  }
+    prevTrack();
+    let currentArtist = artists[currentArtistIndex];
+    let currentTrack = currentArtist.tracks[currentTrackIndex];
+
+    //CHANGE IMAGE & ICON UPON EACH TRACK//
+    let img = document.querySelector('#artist-img');
+    let icon = document.querySelector('#artist-img2');
+    img.src = currentTrack.img;
+    icon.src = currentArtist.icon;
+    if (listedOrNot()) {
+        addToListPlus
+            .classList
+            .remove('bi-plus-circle');
+        addToListPlus
+            .classList
+            .add('bi-plus-circle-fill');
+        addToList.setAttribute('style', 'background-color: #202020; color:#ffff;');
+    } else {
+        addToListPlus
+            .classList
+            .remove('bi-plus-circle-fill');
+        addToListPlus
+            .classList
+            .add('bi-plus-circle');
+        addToList.removeAttribute("style");
+    }
 });
 
 
