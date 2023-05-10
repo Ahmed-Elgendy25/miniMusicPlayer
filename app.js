@@ -497,6 +497,9 @@ function updateCountListened() {
 
 function sortByMostListenedTracks(artists) {
   let artistLength = artists.length;
+  let tableContainer = document.querySelector('tbody');
+  let rows = Array.from(tableContainer.querySelectorAll('.track'));
+
 
   for(let i = 0; i < artistLength; i++) {
     let tracks = artists[i].tracks;
@@ -510,9 +513,13 @@ function sortByMostListenedTracks(artists) {
       }
       if (maxIndex !== j) {
         [tracks[maxIndex], tracks[j]] = [tracks[j], tracks[maxIndex]];
+
+        [rows[maxIndex], rows[j]] = [rows[j], rows[maxIndex]];
       }
     }
   }
+
+  rows.forEach(row => tableContainer.appendChild(row));
 }
 
 
