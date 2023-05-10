@@ -175,6 +175,7 @@ const artists = [
       {
         name:'Free',
         src:'free.mp3',
+        img:'marwanPablo.jpg',
         playList: null,
         countListened: 0,
       },
@@ -182,6 +183,7 @@ const artists = [
        {
         name:'Ghaba',
         src:'ghaba.mp3',
+        img:'ghaba.jpg',
         playList: null,
         countListened: 0,
        }
@@ -195,6 +197,7 @@ const artists = [
     {
       name:'STR3',
       src:'STR3.mp3',
+      img:'dizzy3.jpg',
       playList: null,
       countListened: 0,
     },
@@ -202,11 +205,53 @@ const artists = [
      {
       name:'Restart',
       src:'Restart.mp3',
+      img:'Restart.jpg',
       playList: null,
       countListened: 0,
      }
   ]
+},
+
+{
+  name:'Marwan Moussa',
+  tracks: [
+    {
+      name:'VIP',
+      src:'VIP.mp3',
+      img:'marwanMoussa5.jpg',
+      playList: null,
+      countListened: 0,
+    },
+    
+     {
+      name:'Rio ft.Stormy',
+      src:'RIO.mp3',
+      img:'marwanMoussa3.jpg',
+      playList: null,
+      countListened: 0,
+     },
+
+     {
+      name:'1/4 Qarn ft.R3',
+      src:'ROB3 Qarn.mp3',
+      img:'marwanMoussa2.jpg',
+      playList: null,
+      countListened: 0,
+     },
+
+
+     {
+      name:'Shokran',
+      src:'Shokran.mp3',
+      img:'marwanMoussa4.jpg',
+      playList: null,
+      countListened: 0,
+     },
+  ]
 }
+,
+
+
 
 ];
 
@@ -306,7 +351,13 @@ forwardBtn.addEventListener('click',function() {
 
   playNextTrack();
 
-
+  let currentArtist = artists[currentArtistIndex];
+  let currentTrack = currentArtist.tracks[currentTrackIndex];
+  
+   //CHANGE IMAGE UPON EACH TRACK//
+   let img = document.querySelector('#artist-img');
+  img.src = currentTrack.img;
+  
   if(!listedOrNot()) {
     addToListPlus.classList.remove('bi-plus-circle-fill');
     addToListPlus.classList.add('bi-plus-circle');
@@ -323,7 +374,12 @@ forwardBtn.addEventListener('click',function() {
 backwardBtn.addEventListener('click', function () {
 
   prevTrack();
-
+  let currentArtist = artists[currentArtistIndex];
+  let currentTrack = currentArtist.tracks[currentTrackIndex];
+  
+   //CHANGE IMAGE UPON EACH TRACK//
+   let img = document.querySelector('#artist-img');
+  img.src = currentTrack.img;
   if(listedOrNot()) {
     addToListPlus.classList.remove('bi-plus-circle');
     addToListPlus.classList.add('bi-plus-circle-fill');
