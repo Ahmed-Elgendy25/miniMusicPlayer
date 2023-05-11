@@ -251,7 +251,25 @@ const artists = [
       countListened: 0,
      },
   ]
+},
+
+/*
+{
+  name:'Ahmed Santa',
+  icon:'ahmedSanta2.jpg',
+  tracks: [
+    {
+      name:'Ahmed Santa',
+      src:'ahmedSanta.mp3',
+      img:'ahmedSanta.jpg',
+      playList: null,
+      countListened: 0,
+    }
+    
+ 
+  ]
 }
+*/
 
 
 ];
@@ -279,8 +297,15 @@ function playTrack() {
   song.play();
 
 
+
   albumName.textContent=currentTrack.name;
   artistName.textContent=currentArtist.name;
+  
+ //CHANGE IMAGE & ICON UPON EACH TRACK//
+ let img = document.querySelector('#artist-img');
+ let icon = document.querySelector('#artist-img2');
+ img.src = currentTrack.img;
+ icon.src = currentArtist.icon;
 
 
 }
@@ -291,7 +316,7 @@ function playTrack() {
 function playNextTrack() {
   let currentArtist = artists[currentArtistIndex];
 
-  
+88
   // Play the current track...
   
 
@@ -412,14 +437,14 @@ backwardBtn.addEventListener('click', function () {
 
 
 // Auto switch music when it finishes//
-const ended = song.addEventListener('ended', () => {
+ song.addEventListener('ended', () => {
   const currentArtist = artists[currentArtistIndex];
   const currentTrack = currentArtist.tracks[currentTrackIndex];
 
   // increment the countListened of the current track
   currentTrack.countListened++;
+  
 
-  sortByMostListenedTracks(artists);
 
   /*
   
@@ -495,7 +520,9 @@ addToList.addEventListener('click', function() {
   const tableContainer = document.querySelector('tbody');
   const tr = document.createElement('tr');
   tr.classList.add("track");
-//
+
+
+
   tr.innerHTML = `
   <th scope="row">${generalTrackIndex+1}</th>
     <td><h6>${currentArtist.name} - ${currentTrack.name}</h6></td>
@@ -522,7 +549,9 @@ addToList.addEventListener('click', function() {
     tracksInPlaylist.forEach(track => {
       const artistName = track.querySelector('h6').textContent.split(' - ')[0];
       const trackName = track.querySelector('h6').textContent.split(' - ')[1];
+
       if (artistName === currentArtist.name && trackName === currentTrack.name) {
+        currentTrack.countListened = 0;
         track.remove();
       }
     });
@@ -543,19 +572,6 @@ function listedOrNot() {
 }
 
 
-/*
-function updateCountListened() {
-  const currentArtist = artists[currentArtistIndex];
-  const currentTrack = currentArtist.tracks[currentTrackIndex];
-  
-  if (currentTrack!==null) {
-    currentTrack.countListened++;
-
-  }
-  return currentTrack.countListened;
-}
-*/
-
 
 
 // فى حاجة بص
@@ -567,32 +583,71 @@ function updateCountListened() {
 
 
 
-function sortByMostListenedTracks(artists) {
-  let artistLength = artists.length;
-  let tableContainer = document.querySelector('tbody');
-  let rows = Array.from(tableContainer.querySelectorAll('.track'));
 
 
-  for(let i = 0; i < artistLength; i++) {
-    let tracks = artists[i].tracks;
-    let m = tracks.length;
-    for(let j = 0; j < m; j++) {
-      let maxIndex = j;
-      for(let k = j+1; k < m; k++) {
-        if(tracks[k].countListened > tracks[maxIndex].countListened) {
-          maxIndex = k;
-        }
-      }
-      if (maxIndex !== j) {
-        [tracks[maxIndex], tracks[j]] = [tracks[j], tracks[maxIndex]];
 
-        [rows[maxIndex], rows[j]] = [rows[j], rows[maxIndex]];
-      }
-    }
-  }
 
-  rows.forEach(row => tableContainer.appendChild(row));
+
+
+
+
+
+// Function to sort the playlist tracks based on most listened
+function sortPlaylistByMostListened() {
+  const playlistContainer = document.querySelector('tbody');
+  const playlistTracks = Array.from(playlistContainer.querySelectorAll('.track'));
+
+  playlistTracks.sort((a, b) => {
+    const countA = parseInt(a.querySelector('.count').textContent);
+    const countB = parseInt(b.querySelector('.count').textContent);
+    return countB - countA;
+  });
+
+  // Update the indices of the sorted tracks
+  playlistTracks.forEach((track, index) => {
+    track.querySelector('th').textContent = index + 1;
+  });
+
+  // Re-append the sorted tracks to the playlist container
+  playlistTracks.forEach(track => playlistContainer.appendChild(track));
 }
+
+// Function to handle the end of a track
+function handleTrackEnd() {
+  // Update the countListened for the current track
+
+  // Sort the playlist after the track ends
+  sortPlaylistByMostListened();
+}
+
+// toggle with playlist -> add or delete from playlist//
+addToList.addEventListener('click', function() {
+  // ...
+
+  // add to play-list
+  if (addToListPlus.classList.contains('bi-plus-circle')) {
+    // ...
+
+    tableContainer.append(tr);
+  }
+  // remove from play-list
+  else {
+    // ...
+
+    // Remove the track from the playlist table
+
+    sortPlaylistByMostListened(); // Sort the playlist after removing the track
+  }
+});
+
+// Example code to simulate track end
+// Call this function wherever you handle the end of a track
+function simulateTrackEnd() {
+  handleTrackEnd();
+}
+
+// Example usage: Simulate track end every 5 seconds
+setInterval(simulateTrackEnd, 5000);
 
 
 
@@ -601,58 +656,26 @@ function sortByMostListenedTracks(artists) {
 
 
 /*
-const artists = [
+This code block handles the event when the user clicks the "add to playlist" or "remove from playlist" button (addToList). The specific behavior of adding or removing a track from the playlist is not shown in the code snippet, but it should be implemented accordingly.
 
- {
-    name:'Marwan Pablo',
-    tracks: [
-      {
-        name:'Free',
-        src:'free.mp3',
-        playList: null,
-        countListened: 0,
-      },
-      
-       {
-        name:'Ghaba',
-        src:'ghaba.mp3',
-        playList: null,
-        countListened: 0,
-       }
-    ]
-  }
-,
+If the track is added to the playlist (indicated by the presence of CSS class bi-plus-circle), the track is appended to the playlist table using tableContainer.append(tr). After adding the track, sortPlaylistByMostListened is called to sort the playlist based on the updated count.
 
-{
-  name:'DizzyTooSkinny',
-  tracks: [
-    {
-      name:'STR3',
-      src:'STR3.mp3',
-      playList: null,
-      countListened: 10,
-    },
-    
-     {
-      name:'Restart',
-      src:'Restart.mp3',
-      playList: null,
-      countListened: 0,
-     }
-  ]
-}
-
-];
-*/
-
-
-/*
-[
-  { title: "Song C", timesListened: 20 },
-  { title: "Song D", timesListened: 15 },
-  { title: "Song A", timesListened: 10 },
-  { title: "Song B", timesListened: 5 },
-]
+If the track is being removed from the playlist, the track is removed from the playlist table (specific implementation details are not shown). After removing the track, sortPlaylistByMostListened is called to sort the playlist based on the
 
 
 */
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
