@@ -1,6 +1,6 @@
 let progress = document.querySelector("#progress");
 let song = document.querySelector("#song");
-let ctrlIcon = document.querySelector("#play-btn");
+let ctrlIcon =  document.querySelector("#ctrlIcon");
 let durationDiv = document.createElement('div');
 let p = document.createElement('p');
 const img = document.querySelector(".duotone-img");
@@ -66,21 +66,22 @@ const updateSongTime = () => {
   /* when you click on play button -> it plays 
     also when you click on pause button -> it pause
   */
- let iconPlay=  document.querySelector("#ctrlIcon");
+ 
   ctrlIcon.addEventListener('click',function (e) {
   e.preventDefault();
-  if(iconPlay.classList.contains("bi-pause-circle-fill")) {
+  if(ctrlIcon.classList.contains("bi-pause-circle-fill")) {
     song.pause();
     
-    iconPlay.classList.remove("bi-pause-circle-fill");
-    iconPlay.classList.add("bi-play-circle");
+     
+    ctrlIcon.classList.remove("bi-pause-circle-fill");
+    ctrlIcon.classList.add("bi-play-circle");
 
   } else {
     playTrack();
     
 
-    iconPlay.classList.add("bi-pause-circle-fill");
-    iconPlay.classList.remove("bi-play-circle");
+    ctrlIcon.classList.add("bi-pause-circle-fill");
+    ctrlIcon.classList.remove("bi-play-circle");
   }
 
   updateSongTime();
