@@ -253,7 +253,7 @@ const artists = [
   ]
 },
 
-/*
+
 {
   name:'Ahmed Santa',
   icon:'ahmedSanta2.jpg',
@@ -269,7 +269,6 @@ const artists = [
  
   ]
 }
-*/
 
 
 ];
@@ -654,17 +653,6 @@ setInterval(simulateTrackEnd, 5000);
 
 
 
-
-/*
-This code block handles the event when the user clicks the "add to playlist" or "remove from playlist" button (addToList). The specific behavior of adding or removing a track from the playlist is not shown in the code snippet, but it should be implemented accordingly.
-
-If the track is added to the playlist (indicated by the presence of CSS class bi-plus-circle), the track is appended to the playlist table using tableContainer.append(tr). After adding the track, sortPlaylistByMostListened is called to sort the playlist based on the updated count.
-
-If the track is being removed from the playlist, the track is removed from the playlist table (specific implementation details are not shown). After removing the track, sortPlaylistByMostListened is called to sort the playlist based on the
-
-
-*/
- 
 
 
 
