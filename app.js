@@ -1,6 +1,6 @@
 let progress = document.querySelector("#progress");
 let song = document.querySelector("#song");
-let ctrlIcon = document.querySelector("#ctrlIcon");
+let ctrlIcon = document.querySelector("#play-btn");
 let durationDiv = document.createElement('div');
 let p = document.createElement('p');
 const img = document.querySelector(".duotone-img");
@@ -66,20 +66,21 @@ const updateSongTime = () => {
   /* when you click on play button -> it plays 
     also when you click on pause button -> it pause
   */
+ let iconPlay=  document.querySelector("#ctrlIcon");
   ctrlIcon.addEventListener('click',function (e) {
   e.preventDefault();
-  if(ctrlIcon.classList.contains("bi-pause-circle-fill")) {
+  if(iconPlay.classList.contains("bi-pause-circle-fill")) {
     song.pause();
     
-    ctrlIcon.classList.remove("bi-pause-circle-fill");
-    ctrlIcon.classList.add("bi-play-circle");
+    iconPlay.classList.remove("bi-pause-circle-fill");
+    iconPlay.classList.add("bi-play-circle");
 
   } else {
     playTrack();
     
 
-    ctrlIcon.classList.add("bi-pause-circle-fill");
-    ctrlIcon.classList.remove("bi-play-circle");
+    iconPlay.classList.add("bi-pause-circle-fill");
+    iconPlay.classList.remove("bi-play-circle");
   }
 
   updateSongTime();
@@ -171,7 +172,7 @@ const artists = [
 
  {
     name:'Marwan Pablo',
-    icon:'marwanPablo3.jpg',
+    icon:'Photos/marwanPablo3.jpg',
     tracks: [
       {
         name:'Free',
@@ -194,7 +195,7 @@ const artists = [
 
 {
   name:'Dizzy Too Skinny',
-  icon:'dizzy.jpg',
+  icon:'Photos/dizzy.jpg',
   tracks: [
     {
       name:'STR3',
@@ -216,7 +217,7 @@ const artists = [
 
 {
   name:'Marwan Moussa',
-  icon:'marwanMoussa.jpg',
+  icon:'Photos/marwanMoussa.jpg',
   tracks: [
     {
       name:'VIP',
@@ -256,7 +257,7 @@ const artists = [
 
 {
   name:'Ahmed Santa',
-  icon:'ahmedSanta2.jpg',
+  icon:'Photos/ahmedSanta2.jpg',
   tracks: [
     {
       name:'Ahmed Santa',
@@ -315,7 +316,7 @@ function playTrack() {
 function playNextTrack() {
   let currentArtist = artists[currentArtistIndex];
 
-88
+
   // Play the current track...
   
 
@@ -337,8 +338,11 @@ function playNextTrack() {
     lastTrackIndex=generalTrackIndex;
     generalTrackIndex = 0;
   }
-
+ 
   playTrack();
+ 
+
+
 }
 
 
@@ -347,7 +351,7 @@ function playNextTrack() {
 
 
 // Go to the previous track
-function prevTrack() { // bug here.
+function prevTrack() { 
   if (currentTrackIndex > 0) {
     // If there are previous tracks in the current artist's tracks array, go to the previous track
     currentTrackIndex--;
@@ -366,6 +370,8 @@ function prevTrack() { // bug here.
   }
 
   playTrack();
+
+
 }
 
 
