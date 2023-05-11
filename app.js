@@ -175,16 +175,16 @@ const artists = [
     tracks: [
       {
         name:'Free',
-        src:'free.mp3',
-        img:'marwanPablo.jpg',
+        src:'Music/free.mp3',
+        img:'Photos/marwanPablo.jpg',
         playList: null,
         countListened: 0,
       },
       
        {
         name:'Ghaba',
-        src:'ghaba.mp3',
-        img:'ghaba.jpg',
+        src:'Music/ghaba.mp3',
+        img:'Photos/ghaba.jpg',
         playList: null,
         countListened: 0,
        }
@@ -198,16 +198,16 @@ const artists = [
   tracks: [
     {
       name:'STR3',
-      src:'STR3.mp3',
-      img:'dizzy4.jpg',
+      src:'Music/STR3.mp3',
+      img:'Photos/dizzy4.jpg',
       playList: null,
       countListened: 0,
     },
     
      {
       name:'Restart',
-      src:'Restart.mp3',
-      img:'Restart.jpg',
+      src:'Music/Restart.mp3',
+      img:'Photos/Restart.jpg',
       playList: null,
       countListened: 0,
      }
@@ -220,24 +220,24 @@ const artists = [
   tracks: [
     {
       name:'VIP',
-      src:'VIP.mp3',
-      img:'marwanMoussa5.jpg',
+      src:'Music/VIP.mp3',
+      img:'Photos/marwanMoussa5.jpg',
       playList: null,
       countListened: 0,
     },
     
      {
       name:'Rio ft.Stormy',
-      src:'RIO.mp3',
-      img:'marwanMoussa3.jpg',
+      src:'Music/RIO.mp3',
+      img:'Photos/marwanMoussa3.jpg',
       playList: null,
       countListened: 0,
      },
 
      {
       name:'1/4 Qarn ft.R3',
-      src:'ROB3 Qarn.mp3',
-      img:'marwanMoussa2.jpg',
+      src:'Music/ROB3 Qarn.mp3',
+      img:'Photos/marwanMoussa2.jpg',
       playList: null,
       countListened: 0,
      },
@@ -245,8 +245,8 @@ const artists = [
 
      {
       name:'Shokran',
-      src:'Shokran.mp3',
-      img:'marwanMoussa4.jpg',
+      src:'Music/Shokran.mp3',
+      img:'Photos/marwanMoussa4.jpg',
       playList: null,
       countListened: 0,
      },
@@ -260,8 +260,8 @@ const artists = [
   tracks: [
     {
       name:'Ahmed Santa',
-      src:'ahmedSanta.mp3',
-      img:'ahmedSanta.jpg',
+      src:'Music/ahmedSanta.mp3',
+      img:'Photos/ahmedSanta.jpg',
       playList: null,
       countListened: 0,
     }
