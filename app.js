@@ -66,26 +66,33 @@ const updateSongTime = () => {
   /* when you click on play button -> it plays 
     also when you click on pause button -> it pause
   */
- 
-  ctrlIcon.addEventListener('click',function (e) {
-  e.preventDefault();
-  if(ctrlIcon.classList.contains("bi-pause-circle-fill")) {
-    song.pause();
+  
+
+    let playbackPosition = 0;
+
+    ctrlIcon.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      if (ctrlIcon.classList.contains("bi-pause-circle-fill")) {
+        song.pause();
+        
+        // Store the current playback position
+        playbackPosition = song.currentTime;
+        
+        ctrlIcon.classList.remove("bi-pause-circle-fill");
+        ctrlIcon.classList.add("bi-play-circle");
+      } else {
+        ctrlIcon.classList.add("bi-pause-circle-fill");
+        ctrlIcon.classList.remove("bi-play-circle");
+        
+        // Set the stored playback position and play the song
+        song.currentTime = playbackPosition;
+        song.play();
+      }
+      
+      updateSongTime();
+    });
     
-     
-    ctrlIcon.classList.remove("bi-pause-circle-fill");
-    ctrlIcon.classList.add("bi-play-circle");
-
-  } else {
-    playTrack();
-    
-
-    ctrlIcon.classList.add("bi-pause-circle-fill");
-    ctrlIcon.classList.remove("bi-play-circle");
-  }
-
-  updateSongTime();
-});
 
 /* to make progress circle move in bar of slider*/
 setInterval(() => {
@@ -599,6 +606,7 @@ function listedOrNot() {
 
 
 // Function to sort the playlist tracks based on most listened
+//algorithm: bubble sortS
 function sortPlaylistByMostListened() {
   const playlistContainer = document.querySelector('tbody');
   const playlistTracks = Array.from(playlistContainer.querySelectorAll('.track'));
