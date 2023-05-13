@@ -602,12 +602,22 @@ function listedOrNot() {
 function sortPlaylistByMostListened() {
   const playlistContainer = document.querySelector('tbody');
   const playlistTracks = Array.from(playlistContainer.querySelectorAll('.track'));
+  const totalTracks = playlistTracks.length;
 
-  playlistTracks.sort((a, b) => {
-    const countA = parseInt(a.querySelector('.count').textContent);
-    const countB = parseInt(b.querySelector('.count').textContent);
-    return countB - countA;
-  });
+  let swapped;
+  do {
+    swapped = false;
+    for (let i = 0; i < totalTracks - 1; i++) {
+      const countA = parseInt(playlistTracks[i].querySelector('.count').textContent);
+      const countB = parseInt(playlistTracks[i + 1].querySelector('.count').textContent);
+
+      if (countA < countB) {
+        // Swap tracks
+        [playlistTracks[i], playlistTracks[i + 1]] = [playlistTracks[i + 1], playlistTracks[i]];
+        swapped = true;
+      }
+    }
+  } while (swapped);
 
   // Update the indices of the sorted tracks
   playlistTracks.forEach((track, index) => {
@@ -615,8 +625,12 @@ function sortPlaylistByMostListened() {
   });
 
   // Re-append the sorted tracks to the playlist container
+  playlistContainer.innerHTML = '';
   playlistTracks.forEach(track => playlistContainer.appendChild(track));
 }
+
+
+
 
 // Function to handle the end of a track
 function handleTrackEnd() {
